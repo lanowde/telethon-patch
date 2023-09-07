@@ -108,7 +108,7 @@ setattr(TelegramClient, "set_chat_username", set_chat_username)
 
 setattr(TelegramClient, "get_users", get_users)
 setattr(TelegramClient, "get_chat", TelegramClient.get_entity)
-setattr(TelegramClient, "run", TelegramClient.run_until_disconnected)
+# setattr(TelegramClient, "run", TelegramClient.run_until_disconnected)
 
 # Message
 setattr(Message, "download", Message.download_media)
