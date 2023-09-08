@@ -10,6 +10,7 @@ from telethon.tl.functions.phone import ToggleGroupCallRecordRequest
 from telethon.events.common import EventCommon, name_inner_event, EventBuilder
 
 
+'''
 @name_inner_event
 class JoinRequest(EventBuilder):
     """
@@ -64,6 +65,7 @@ class JoinRequest(EventBuilder):
 
 
 setattr(events, "JoinRequest", JoinRequest)
+'''
 
 
 @name_inner_event
