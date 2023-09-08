@@ -1,15 +1,20 @@
-from telethon.client import TelegramClient
-from typing import List
-from telethon import hints, utils
 from secrets import token_bytes
+from typing import List
+
+from telethon.client import TelegramClient
+from telethon import hints, utils
 from telethon.tl.types import InputMediaPoll, TypePoll, PollAnswer
 from telethon.tl.functions.account import UpdateUsernameRequest
 from telethon.tl.functions.channels import UpdateUsernameRequest as UpdateChatUsername
 from telethon.tl.custom import Message
 
 
+"""
 async def send_document(self: TelegramClient, chat_id, document, *args, **kwargs):
     await self.send_file(chat_id, document, *args, **kwargs)
+
+setattr(TelegramClient, "send_document", send_document)
+"""
 
 
 async def send_poll(
@@ -58,6 +63,10 @@ async def send_poll(
     )
 
 
+setattr(TelegramClient, "send_poll", send_poll)
+
+
+"""
 async def vote_poll(
     self: TelegramClient, chat_id: "hints.EntityLike", message_id, options
 ):
@@ -86,11 +95,10 @@ async def set_chat_username(self: TelegramClient, chat_id, username):
 # setattr(TelegramClient, "get_chat_member", TelegramClient.GetParticipant)  # type: ignore
 setattr(TelegramClient, "leave_chat", TelegramClient.delete_dialog)
 
-setattr(TelegramClient, "send_document", send_document)
+
 setattr(TelegramClient, "send_video", send_document)
 setattr(TelegramClient, "send_sticker", send_document)
 setattr(TelegramClient, "send_voice", send_document)
-setattr(TelegramClient, "send_poll", send_poll)
 setattr(TelegramClient, "vote_poll", vote_poll)
 setattr(TelegramClient, "pin_chat_message", TelegramClient.pin_message)
 setattr(TelegramClient, "unpin_chat_message", TelegramClient.unpin_message)
@@ -109,7 +117,8 @@ setattr(TelegramClient, "set_chat_username", set_chat_username)
 setattr(TelegramClient, "get_users", get_users)
 setattr(TelegramClient, "get_chat", TelegramClient.get_entity)
 # setattr(TelegramClient, "run", TelegramClient.run_until_disconnected)
+"""
 
 # Message
 setattr(Message, "download", Message.download_media)
-setattr(Message, "vote", Message.click)
+# setattr(Message, "vote", Message.click)
