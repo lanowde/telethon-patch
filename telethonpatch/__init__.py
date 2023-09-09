@@ -6,7 +6,7 @@ __author__ = "New-Dev0"
 __version__ = "1.0.9"
 
 
-print(f"Starting telethonpatch - v{__version__}")
+print(f"Starting telethonpatch - [{__version__}]")
 
 
 from . import methods, custom, events, pyrogram
@@ -20,4 +20,4 @@ from telethon import TelegramClient
 
 from telethon.tl.alltlobjects import LAYER
 
-print(f"Patched Successfully! • Layer {LAYER}")
+print(f"Patched Successfully! - [Layer {LAYER}]")
