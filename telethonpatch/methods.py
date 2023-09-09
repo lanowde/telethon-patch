@@ -281,4 +281,6 @@ setattr(TelegramClient, "join_chat", join_chat)
 setattr(TelegramClient, "toggle_hidden", toggle_hidden)
 
 # setattr(TelegramClient, "set_profile_photo", set_profile_photo)
-setattr(TelegramClient, "set_contact_photo", set_contact_photo)
+
+# doesn't works.
+# setattr(TelegramClient, "set_contact_photo", set_contact_photo)

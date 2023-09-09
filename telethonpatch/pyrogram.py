@@ -1,9 +1,9 @@
 from secrets import token_bytes
 from typing import List
 
-from telethon.client import TelegramClient
 from telethon import hints, utils
-from telethon.tl.types import InputMediaPoll, TypePoll, PollAnswer
+from telethon.client import TelegramClient
+from telethon.tl import types
 from telethon.tl.functions.account import UpdateUsernameRequest
 from telethon.tl.functions.channels import UpdateUsernameRequest as UpdateChatUsername
 from telethon.tl.custom import Message
@@ -36,7 +36,7 @@ async def send_poll(
     )
     options = list(
         map(
-            lambda opt: PollAnswer(opt, token_bytes(5))
+            lambda opt: types.PollAnswer(opt, token_bytes(5))
             if isinstance(opt, str)
             else opt,
             options,
@@ -44,8 +44,8 @@ async def send_poll(
     )
     await self.send_file(
         chat_id,
-        InputMediaPoll(  # type: ignore
-            poll=TypePoll(
+        types.InputMediaPoll(  # type: ignore
+            poll=types.TypePoll(
                 id=0,
                 question=question,
                 answers=options,
@@ -119,6 +119,18 @@ setattr(TelegramClient, "get_chat", TelegramClient.get_entity)
 # setattr(TelegramClient, "run", TelegramClient.run_until_disconnected)
 """
 
+
 # Message
-setattr(Message, "download", Message.download_media)
+
+
+async def copy_message(self: Message, to_chat, **kwargs):
+    if isinstance(self, types.MessageService):
+        raise TypeError("Can't Copy Service Message.")
+    if "caption" in kwargs:
+        self.text = kwargs.pop("caption")
+    return await self.client.send_message(to_chat, self, **kwargs)
+
+
 # setattr(Message, "vote", Message.click)
+setattr(Message, "copy", copy_message)
+setattr(Message, "download", Message.download_media)
