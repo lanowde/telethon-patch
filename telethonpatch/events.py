@@ -10,7 +10,6 @@ from telethon.tl.functions.phone import ToggleGroupCallRecordRequest
 from telethon.events.common import EventCommon, name_inner_event, EventBuilder
 
 
-'''
 @name_inner_event
 class JoinRequest(EventBuilder):
     """
@@ -22,8 +21,8 @@ class JoinRequest(EventBuilder):
         if isinstance(update, UpdateBotChatInviteRequester):
             return cls.Event(update)
 
-    #        elif isinstance(update, MessageService) and isinstance(update.action, MessageActionChatJoinedByRequest):
-    #            return cls.Event(update, approved=True)
+        # elif isinstance(update, MessageService) and isinstance(update.action, MessageActionChatJoinedByRequest):
+        # return cls.Event(update, approved=True)
 
     class Event(EventCommon):
         def __init__(self, update):
@@ -64,10 +63,6 @@ class JoinRequest(EventBuilder):
             return await self.client.get_entity(self.user_id)
 
 
-setattr(events, "JoinRequest", JoinRequest)
-'''
-
-
 @name_inner_event
 class GroupCall(EventBuilder):
     """
@@ -75,7 +70,8 @@ class GroupCall(EventBuilder):
 
     * Group call started
     * Group call ended
-    * Group call scheduled."""
+    * Group call scheduled
+    """
 
     @classmethod
     def build(cls, update, _, __):
@@ -137,4 +133,5 @@ class GroupCall(EventBuilder):
                 )
 
 
+setattr(events, "JoinRequest", JoinRequest)
 setattr(events, "GroupCall", GroupCall)

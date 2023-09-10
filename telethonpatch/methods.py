@@ -243,7 +243,7 @@ async def join_chat(
     raise ValueError("Either entity or hash is required.")
 
 
-async def toggle_hidden(
+async def hide_participants(
     self: TelegramClient, channel: types.InputChannel, enabled: bool = False
 ):
     """Toggle hidden participants"""
@@ -278,9 +278,9 @@ setattr(TelegramClient, "create_topic", create_topic)
 setattr(TelegramClient, "edit_topic", edit_topic)
 setattr(TelegramClient, "get_topics", get_topics)
 setattr(TelegramClient, "join_chat", join_chat)
-setattr(TelegramClient, "toggle_hidden", toggle_hidden)
+setattr(TelegramClient, "hide_participants", hide_participants)
 
 # setattr(TelegramClient, "set_profile_photo", set_profile_photo)
 
-# doesn't works.
+# -> doesn't works.
 # setattr(TelegramClient, "set_contact_photo", set_contact_photo)
