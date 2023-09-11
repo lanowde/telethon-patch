@@ -83,7 +83,7 @@ async def edit_or_reply(
     """
     Edit or Reply to a Message.
     """
-    reply_to = self.reply_to_msg_id or self
+    reply_to = self.reply_to_msg_id or self.id
     link_preview = kwargs.get("link_preview", False)
     if self.out and not isinstance(self, types.MessageService):
         if edit_time:

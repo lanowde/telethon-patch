@@ -3,10 +3,10 @@
 # Copyright  New-dev0
 
 __author__ = "New-Dev0"
-__version__ = "1.2"
+__version__ = "1.3.0"
 
 
-print(f"Starting telethonpatch - [{__version__}]")
+print(f"Starting telethonpatch - [v{__version__}]")
 
 
 from . import methods, custom, events, pyrogram
