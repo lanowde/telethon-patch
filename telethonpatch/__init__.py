@@ -3,13 +3,14 @@
 # Copyright  New-dev0
 
 __author__ = "New-Dev0"
-__version__ = "1.4.0"
+__version__ = "1.5.0"
 
 
 print(f"Starting telethonpatch - [v{__version__}]")
 
 
-from . import methods, custom, events, pyrogram
+# dont change import order
+from . import methods, events, custom, pyrogram
 
 
 # Rename long name methods..

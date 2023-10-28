@@ -9,14 +9,6 @@ from telethon.tl.functions.channels import UpdateUsernameRequest as UpdateChatUs
 from telethon.tl.custom import Message
 
 
-"""
-async def send_document(self: TelegramClient, chat_id, document, *args, **kwargs):
-    await self.send_file(chat_id, document, *args, **kwargs)
-
-setattr(TelegramClient, "send_document", send_document)
-"""
-
-
 async def send_poll(
     self: TelegramClient,
     chat_id: "hints.EntityLike",
@@ -44,7 +36,7 @@ async def send_poll(
     )
     await self.send_file(
         chat_id,
-        types.InputMediaPoll(  # type: ignore
+        types.InputMediaPoll(
             poll=types.TypePoll(
                 id=0,
                 question=question,
@@ -63,16 +55,13 @@ async def send_poll(
     )
 
 
-setattr(TelegramClient, "send_poll", send_poll)
-
-
 """
 async def vote_poll(
     self: TelegramClient, chat_id: "hints.EntityLike", message_id, options
 ):
     if isinstance(options, int):
         options = [int]
-    message: Message = await self.get_messages(chat_id, ids=message_id)  # type: ignore
+    message: Message = await self.get_messages(chat_id, ids=message_id)  
     if message:
         return await message.click(options)
 
@@ -91,36 +80,38 @@ async def set_chat_username(self: TelegramClient, chat_id, username):
     return await self(UpdateChatUsername(chat_id, username))
 
 
-# Patch Pyrogram methods
-# setattr(TelegramClient, "get_chat_member", TelegramClient.GetParticipant)  # type: ignore
+async def send_document(self: TelegramClient, chat_id, document, *args, **kwargs):
+    await self.send_file(chat_id, document, *args, **kwargs)
+
+
+# Patch Pyrogram methods,
+
+# setattr(TelegramClient, "get_chat_member", TelegramClient.GetParticipant)
 setattr(TelegramClient, "leave_chat", TelegramClient.delete_dialog)
 
-
+setattr(TelegramClient, "send_document", send_document)
 setattr(TelegramClient, "send_video", send_document)
 setattr(TelegramClient, "send_sticker", send_document)
 setattr(TelegramClient, "send_voice", send_document)
+
 setattr(TelegramClient, "vote_poll", vote_poll)
 setattr(TelegramClient, "pin_chat_message", TelegramClient.pin_message)
 setattr(TelegramClient, "unpin_chat_message", TelegramClient.unpin_message)
 
-# setattr(TelegramClient, "create_channel", TelegramClient.CreateChannel) # type: ignore
-
-# setattr(TelegramClient, "set_chat_title", TelegramClient.EditTitle) # type: ignore
-# setattr(TelegramClient, "get_common_chats", TelegramClient.GetCommonChats) # type: ignore
+setattr(TelegramClient, "create_channel", TelegramClient.CreateChannel) 
+setattr(TelegramClient, "set_chat_title", TelegramClient.EditTitle) 
+setattr(TelegramClient, "get_common_chats", TelegramClient.GetCommonChats) 
 setattr(TelegramClient, "resolve_peer", TelegramClient.get_input_entity)
-
-# setattr(TelegramClient, "block_user", TelegramClient.Block) # type: ignore
-# setattr(TelegramClient, "unblock_user", TelegramClient.Unblock) # type: ignore
+setattr(TelegramClient, "block_user", TelegramClient.Block) 
+setattr(TelegramClient, "unblock_user", TelegramClient.Unblock) 
 setattr(TelegramClient, "set_username", set_username)
 setattr(TelegramClient, "set_chat_username", set_chat_username)
 
 setattr(TelegramClient, "get_users", get_users)
 setattr(TelegramClient, "get_chat", TelegramClient.get_entity)
-# setattr(TelegramClient, "run", TelegramClient.run_until_disconnected)
+
+setattr(TelegramClient, "run", TelegramClient.run_until_disconnected)
 """
-
-
-# Message
 
 
 async def copy_message(self: Message, to_chat, **kwargs):
@@ -132,5 +123,7 @@ async def copy_message(self: Message, to_chat, **kwargs):
 
 
 # setattr(Message, "vote", Message.click)
+# setattr(Message, "download", Message.download_media)
+
+setattr(TelegramClient, "send_poll", send_poll)
 setattr(Message, "copy", copy_message)
-setattr(Message, "download", Message.download_media)

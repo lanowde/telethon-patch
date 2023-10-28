@@ -13,10 +13,9 @@ from telethon.tl.types import (
 )
 
 
-# ------------------ Button ----------------------------
+# Button
 
 
-# Button.mention
 def mention(text, user):
     """Send Button with UserProfile mention.
 
@@ -24,7 +23,6 @@ def mention(text, user):
     return InputKeyboardButtonUserProfile(text, user)
 
 
-# Button.web
 def web(text, url):
     """
     Send Button with WebView.
@@ -34,14 +32,10 @@ def web(text, url):
     return KeyboardButtonSimpleWebView(text, url)
 
 
-setattr(Button, "mention", mention)
-setattr(Button, "web", web)
+# Message
 
 
-# ------------------ Message ----------------------------
-
-
-# message.message_link
+# Message.message_link
 def message_link(self: "Message"):
     """Returns the message link."""
     if isinstance(self.chat, types.User) or self.is_private:
@@ -60,7 +54,7 @@ def message_link(self: "Message"):
     return f"https://t.me/c/{chat}/{self.id}"
 
 
-# message.comment
+# Message.comment
 async def comment(self: "Message", *args, **kwargs):
     """Bound Method to comment."""
     if self._client:
@@ -69,14 +63,29 @@ async def comment(self: "Message", *args, **kwargs):
         )
 
 
-# message.react
-async def react(self: "Message", *args, **kwargs):
-    """Bound method to react to messages"""
+# Message.react
+async def react(
+    self: "Message",
+    reaction: "typing.Optional[hints.Reaction]" = None,
+    big: bool = False,
+    add_to_recent: bool = False,
+):
+    """
+    Reacts on the given message. Shorthand for
+    `telethon.client.messages.MessageMethods.send_reaction`
+    with both ``entity`` and ``message`` already set.
+    """
     if self._client:
-        return await self._client.send_reaction(self.chat_id, self.id, *args, **kwargs)
+        return await self._client.send_reaction(
+            await self.get_input_chat(),
+            self.id,
+            reaction,
+            big=big,
+            add_to_recent=add_to_recent,
+        )
 
 
-# message.eor
+# Message.eor
 async def edit_or_reply(
     self: "Message", text=None, time=None, edit_time=None, **kwargs
 ):
@@ -113,8 +122,57 @@ async def edit_or_reply(
     return ok
 
 
+# Message.translate
+async def translate(self, to_lang: str):
+    """
+    Translates the message using Google Translate.
+
+    Args:
+        to_lang (`str`):
+            The language to translate to. Must be a valid language code
+            (e.g. ``en``, ``es``, ``fr``, etc).
+
+    Returns:
+        `str`: The translated text.
+
+    Example:
+        .. code-block:: python
+            # Translate the message to Spanish
+            translated = await message.translate('es')
+    """
+    if self._client:
+        return await self._client.translate(self.peer_id, self, to_lang)
+
+
+# Message.transcribe
+async def transcribe(self) -> "typing.Optional[str]":
+    """
+    Transcribes the message using native Telegram feature.
+
+    Returns:
+        `str`: The transcribed text.
+
+    Example:
+        .. code-block:: python
+            # Transcribe the message
+            transcribed = await message.transcribe()
+    """
+    if self._client:
+        return await self._client.transcribe(self.peer_id, self)
+
+
+# button functionalities
+setattr(Button, "mention", mention)
+setattr(Button, "web", web)
+
+# message link
 setattr(Message, "message_link", property(message_link))
 
+# from original telepatch
 setattr(Message, "comment", comment)
 setattr(Message, "eor", edit_or_reply)
+
+# from hikka
 setattr(Message, "react", react)
+setattr(Message, "translate", translate)
+setattr(Message, "transcribe", transcribe)
