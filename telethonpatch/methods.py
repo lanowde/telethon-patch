@@ -212,7 +212,7 @@ async def transcribe(
     self: TelegramClient,
     peer: "hints.EntityLike",
     message: "hints.MessageIDLike",
-    timeout: int = 20,
+    timeout: int = 30,
 ) -> typing.Optional[str]:
     result = await self(
         functions.messages.TranscribeAudioRequest(
@@ -260,6 +260,7 @@ async def translate(
 
     result = await self(
         functions.messages.TranslateTextRequest(
+            to_lang=to_lang,
             peer=peer,
             id=[msg_id],
             text=[
@@ -268,14 +269,10 @@ async def translate(
                     entities or message.entities or [],
                 )
             ],
-            to_lang=to_lang,
         )
     )
     return (
-        extensions.html.unparse(
-            result.result[0].text,
-            result.result[0].entities,
-        )
+        (result.result[0].text, result.result[0].entities)
         if result and result.result
         else ""
     )
@@ -301,12 +298,29 @@ async def hide_participants(
 
 
 async def set_contact_photo(
-    self: TelegramClient, user: types.InputUser, file=None, **kwargs
+    self: TelegramClient,
+    user: types.InputUser,
+    file: str = None,
+    video: str = None,
+    suggest: bool = True,
+    save: bool = False,
+    **kwargs,
 ):
     if isinstance(file, str):
         file = await self.upload_file(file)
+        video = None
+    elif isinstance(video, str):
+        video = await self.upload_file(video)
+        file = None
     return await self(
-        functions.photos.UploadContactProfilePhotoRequest(user, file=file, **kwargs)
+        functions.photos.UploadContactProfilePhotoRequest(
+            user,
+            file=file,
+            video=video,
+            suggest=suggest,
+            save=True,
+            **kwargs,
+        )
     )
 
 
@@ -426,7 +440,7 @@ async def get_topics(
     offset_date: typing.Optional[datetime.datetime] = None,
     offset_id: int = 0,
     offset_topic: int = 0,
-    limit: int = None,
+    limit: int = 50,
     q: typing.Optional[str] = None,
 ):
     """
@@ -572,7 +586,7 @@ setattr(TelegramClient, "set_quick_reaction", set_quick_reaction)
 
 # for premium users maybe!
 setattr(TelegramClient, "translate", translate)
-setattr(TelegramClient, "translate", translate)
+setattr(TelegramClient, "transcribe", transcribe)
 setattr(TelegramClient, "set_emoji_status", set_emoji_status)
 
 # topic functions
@@ -586,5 +600,5 @@ setattr(TelegramClient, "delete_topic", delete_topic)
 setattr(TelegramClient, "join_chat", join_chat)
 setattr(TelegramClient, "hide_participants", hide_participants)
 
-# doesn't works
-# setattr(TelegramClient, "set_contact_photo", set_contact_photo)
+# might not work at all
+setattr(TelegramClient, "set_contact_photo", set_contact_photo)
