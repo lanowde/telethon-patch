@@ -210,13 +210,13 @@ async def set_emoji_status(
 
 async def transcribe(
     self: TelegramClient,
-    peer: "hints.EntityLike",
+    entity: "hints.EntityLike",
     message: "hints.MessageIDLike",
     timeout: int = 30,
 ) -> typing.Optional[str]:
     result = await self(
         functions.messages.TranscribeAudioRequest(
-            peer,
+            entity,
             utils.get_message_id(message),
         )
     )
@@ -245,7 +245,7 @@ async def transcribe(
 
 async def translate(
     self: TelegramClient,
-    peer: "hints.EntityLike",
+    entity: "hints.EntityLike",
     message: "hints.MessageIDLike",
     to_lang: str,
     raw_text: "typing.Optional[str]" = None,
@@ -256,12 +256,12 @@ async def translate(
         return None
 
     if not isinstance(message, types.Message):
-        message = (await self.get_messages(peer, ids=[msg_id]))[0]
+        message = (await self.get_messages(entity, ids=[msg_id]))[0]
 
     result = await self(
         functions.messages.TranslateTextRequest(
             to_lang=to_lang,
-            peer=peer,
+            peer=entity,
             id=[msg_id],
             text=[
                 types.TextWithEntities(
@@ -318,7 +318,7 @@ async def set_contact_photo(
             file=file,
             video=video,
             suggest=suggest,
-            save=True,
+            save=save,
             **kwargs,
         )
     )

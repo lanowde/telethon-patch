@@ -123,7 +123,7 @@ async def edit_or_reply(
 
 
 # Message.translate
-async def translate(self, to_lang: str):
+async def translate(self, to_lang: str, **kwargs):
     """
     Translates the message using Google Translate.
 
@@ -141,11 +141,11 @@ async def translate(self, to_lang: str):
             translated = await message.translate('es')
     """
     if self._client:
-        return await self._client.translate(self.peer_id, self, to_lang)
+        return await self._client.translate(self.peer_id, self, to_lang, **kwargs)
 
 
 # Message.transcribe
-async def transcribe(self) -> "typing.Optional[str]":
+async def transcribe(self, **kwargs) -> "typing.Optional[str]":
     """
     Transcribes the message using native Telegram feature.
 
@@ -158,7 +158,7 @@ async def transcribe(self) -> "typing.Optional[str]":
             transcribed = await message.transcribe()
     """
     if self._client:
-        return await self._client.transcribe(self.peer_id, self)
+        return await self._client.transcribe(self.peer_id, self, **kwargs)
 
 
 # button functionalities
@@ -175,4 +175,4 @@ setattr(Message, "eor", edit_or_reply)
 # from hikka
 setattr(Message, "react", react)
 setattr(Message, "translate", translate)
-setattr(Message, "transcribe", transcribe)
+# setattr(Message, "transcribe", transcribe)

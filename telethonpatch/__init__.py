@@ -3,7 +3,7 @@
 # Copyright  New-dev0
 
 __author__ = "New-Dev0"
-__version__ = "1.5.5"
+__version__ = "1.6.0"
 
 
 print(f"Starting telethonpatch - [v{__version__}]")
